@@ -6,9 +6,15 @@ package periodicTable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -17,7 +23,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
  * @author Mark
  *
  */
-public class PeriodicTableFrame extends JFrame {
+public class PeriodicTableFrame extends JFrame implements ActionListener {
 	/**
 	 * 
 	 */
@@ -25,20 +31,101 @@ public class PeriodicTableFrame extends JFrame {
 	private JButton[] elementButtons = new JButton[162];
 	private String[] elementButtonLabels = new String[162];
 	private JPanel displayPanel = new JPanel();
-	private Color nonmetalRed = new Color(255, 0, 0);
-	private Color alkaliMetalGreen = new Color(25, 155, 25);
-	private Color alkalineEarthMetalGreen = new Color(25, 100, 25);
-	private Color metalloidViolet = new Color(200, 100, 255);
-	private Color otherMetalPurple = new Color(100, 0, 100);
-	private Color halogenPink = new Color(255, 0, 100);
-	private Color nobleGasOrange = new Color(251, 78, 18);
-	private Color transitionMetalBlue = new Color(0, 100, 255);
-	private Color lanthanideBlue = new Color(0, 155, 155);
-	private Color actinideBlue = new Color(0, 55, 55);
-	private Color textWhite = new Color(255, 255, 255);
-	//private Color shadow = new Color(0, 0, 0);
+	private static final Color nonmetalRed = new Color(255, 0, 0);
+	private static final Color alkaliMetalGreen = new Color(25, 155, 25);
+	private static final Color alkalineEarthMetalGreen = new Color(25, 100, 25);
+	private static final Color metalloidViolet = new Color(200, 100, 255);
+	private static final Color otherMetalPurple = new Color(100, 0, 100);
+	private static final Color halogenPink = new Color(255, 0, 100);
+	private static final Color nobleGasOrange = new Color(251, 78, 18);
+	private static final Color transitionMetalBlue = new Color(0, 100, 255);
+	private static final Color lanthanideBlue = new Color(0, 155, 155);
+	private static final Color actinideBlue = new Color(0, 55, 55);
+	private static final Color textWhite = new Color(255, 255, 255);
+	private static final Color backgroundBlack = new Color(0, 0, 0);
+	private JMenuBar mnuBar = new JMenuBar();
+	private JMenu file = new JMenu("File");
+	private JMenuItem fileExit = new JMenuItem("Exit");
+	private JMenu options = new JMenu("Options");
+	private JMenu help = new JMenu("Help");
+	private JMenuItem helpAbout = new JMenuItem("About");
 
 	PeriodicTableFrame() {
+		setLabels();
+		setJMenuBar(mnuBar);
+		mnuBar.add(file);
+		file.add(fileExit);
+		mnuBar.add(options);
+		mnuBar.add(help);
+		help.add(helpAbout);
+
+		fileExit.addActionListener(this);
+		helpAbout.addActionListener(this);
+
+		fileExit.setActionCommand("Exit");
+		helpAbout.setActionCommand("About");
+
+		for (int i = 0; i < 162; i++) {
+			elementButtons[i] = new JButton(elementButtonLabels[i]);
+		}
+		this.setLayout(new BorderLayout());
+		displayPanel.setLayout(new GridLayout(9, 19, 5, 5));
+		for (int i = 0; i < 162; i++) {
+			displayPanel.add(elementButtons[i]);
+			if (i > 0 && i < 17) {
+				elementButtons[i].setVisible(false);
+			}
+			if (i > 19 && i < 30) {
+				elementButtons[i].setVisible(false);
+			}
+			if (i > 37 && i < 48) {
+				elementButtons[i].setVisible(false);
+			}
+			if (i > 125 && i < 129) {
+				elementButtons[i].setVisible(false);
+			}
+			if (i > 143 && i < 147) {
+				elementButtons[i].setVisible(false);
+			}
+		}
+		for (int i = 0; i < 162; i++) {
+			if (i == 0 || (i < 34 && i > 30) || i == 50 || i == 51 || i == 69) {
+				elementButtons[i].setBackground(nonmetalRed);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 18 || i == 36 || i == 54 || i == 72 || i == 90 || i == 108) {
+				elementButtons[i].setBackground(alkaliMetalGreen);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 19 || i == 37 || i == 55 || i == 73 || i == 91 || i == 109) {
+				elementButtons[i].setBackground(alkalineEarthMetalGreen);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 30 || i == 49 || i == 67 || i == 68 || i == 86 || i == 87 || i == 105) {
+				elementButtons[i].setBackground(metalloidViolet);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 48 || i == 66 || i == 84 || i == 85 || (i > 101 && i < 105) || (i > 119 && i < 124)) {
+				elementButtons[i].setBackground(otherMetalPurple);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 34 || i == 52 || i == 70 || i == 88 || i == 106 || i == 124) {
+				elementButtons[i].setBackground(halogenPink);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 17 || i == 35 || i == 53 || i == 71 || i == 89 || i == 107 || i == 125) {
+				elementButtons[i].setBackground(nobleGasOrange);
+				elementButtons[i].setForeground(textWhite);
+			} else if ((i > 55 && i < 66) || (i > 73 && i < 84) || (i > 92 && i < 102) || (i > 110 && i < 120)) {
+				elementButtons[i].setBackground(transitionMetalBlue);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 92 || (i > 128 && i < 144)) {
+				elementButtons[i].setBackground(lanthanideBlue);
+				elementButtons[i].setForeground(textWhite);
+			} else if (i == 110 || (i > 146 && i < 162)) {
+				elementButtons[i].setBackground(actinideBlue);
+				elementButtons[i].setForeground(textWhite);
+			}
+		}
+		add(displayPanel, BorderLayout.CENTER);
+
+	}
+
+	private void setLabels() {
 		elementButtonLabels[0] = "<html><div style=\"text-align: center;\"><strong>" + "1" + "<br>" + "H" + "<br>"
 				+ "1.008" + "</strong></html>";
 		elementButtonLabels[1] = "";
@@ -187,7 +274,8 @@ public class PeriodicTableFrame extends JFrame {
 				+ "132.905" + "</strong></html>";
 		elementButtonLabels[91] = "<html><div style=\"text-align: center;\"><strong>" + "56" + "<br>" + "Ba" + "<br>"
 				+ "137.327" + "</strong></html>";
-		elementButtonLabels[92] = "<html><div style=\"text-align: center;\"><strong>" + "*" + "<br>" + "57-71" + "</strong></html>";
+		elementButtonLabels[92] = "<html><div style=\"text-align: center;\"><strong>" + "*" + "<br>" + "57-71"
+				+ "</strong></html>";
 		elementButtonLabels[93] = "<html><div style=\"text-align: center;\"><strong>" + "72" + "<br>" + "Hf" + "<br>"
 				+ "178.49" + "</strong></html>";
 		elementButtonLabels[94] = "<html><div style=\"text-align: center;\"><strong>" + "73" + "<br>" + "Ta" + "<br>"
@@ -222,7 +310,8 @@ public class PeriodicTableFrame extends JFrame {
 				+ "223.02" + "</strong></html>";
 		elementButtonLabels[109] = "<html><div style=\"text-align: center;\"><strong>" + "88" + "<br>" + "Ra" + "<br>"
 				+ "226.025" + "</strong></html>";
-		elementButtonLabels[110] = "<html><div style=\"text-align: center;\"><strong>" + "**" + "<br>" + "89-103" + "</strong></html>";
+		elementButtonLabels[110] = "<html><div style=\"text-align: center;\"><strong>" + "**" + "<br>" + "89-103"
+				+ "</strong></html>";
 		elementButtonLabels[111] = "<html><div style=\"text-align: center;\"><strong>" + "104" + "<br>" + "Rf" + "<br>"
 				+ "261.109" + "</strong></html>";
 		elementButtonLabels[112] = "<html><div style=\"text-align: center;\"><strong>" + "105" + "<br>" + "Db" + "<br>"
@@ -319,65 +408,20 @@ public class PeriodicTableFrame extends JFrame {
 				+ "259.101" + "</strong></html>";
 		elementButtonLabels[161] = "<html><div style=\"text-align: center;\"><strong>" + "103" + "<br>" + "Lr" + "<br>"
 				+ "262.11" + "</strong></html>";
+	}
 
-		for (int i = 0; i < 162; i++) {
-			elementButtons[i] = new JButton(elementButtonLabels[i]);
-		}
-		this.setLayout(new BorderLayout());
-		displayPanel.setLayout(new GridLayout(9, 19, 5, 5));
-		for (int i = 0; i < 162; i++) {
-			displayPanel.add(elementButtons[i]);
-			if (i > 0 && i < 17) {
-				elementButtons[i].setVisible(false);
-			}
-			if (i > 19 && i < 30) {
-				elementButtons[i].setVisible(false);
-			}
-			if (i > 37 && i < 48) {
-				elementButtons[i].setVisible(false);
-			}
-			if (i > 125 && i < 129) {
-				elementButtons[i].setVisible(false);
-			}
-			if (i > 143 && i < 147) {
-				elementButtons[i].setVisible(false);
-			}
-		}
-		for (int i = 0; i < 162; i++) {
-			if (i == 0 || (i < 34 && i > 30) || i == 50 || i == 51 || i == 69) {
-				elementButtons[i].setBackground(nonmetalRed);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 18 || i == 36 || i == 54 || i == 72 || i == 90 || i == 108) {
-				elementButtons[i].setBackground(alkaliMetalGreen);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 19 || i == 37 || i == 55 || i == 73 || i == 91 || i == 109) {
-				elementButtons[i].setBackground(alkalineEarthMetalGreen);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 30 || i == 49 || i == 67 || i == 68 || i == 86 || i == 87 || i == 105) {
-				elementButtons[i].setBackground(metalloidViolet);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 48 || i == 66 || i == 84 || i == 85 || (i > 101 && i < 105) || (i > 119 && i < 124)) {
-				elementButtons[i].setBackground(otherMetalPurple);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 34 || i == 52 || i == 70 || i == 88 || i == 106 || i == 124) {
-				elementButtons[i].setBackground(halogenPink);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 17 || i == 35 || i == 53 || i == 71 || i == 89 || i == 107 || i == 125) {
-				elementButtons[i].setBackground(nobleGasOrange);
-				elementButtons[i].setForeground(textWhite);
-			} else if ((i > 55 && i < 66) || (i > 73 && i < 84) || (i > 92 && i < 102) || (i > 110 && i < 120)) {
-				elementButtons[i].setBackground(transitionMetalBlue);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 92 || (i > 128 && i < 144)) {
-				elementButtons[i].setBackground(lanthanideBlue);
-				elementButtons[i].setForeground(textWhite);
-			} else if (i == 110 || (i > 146 && i < 162)) {
-				elementButtons[i].setBackground(actinideBlue);
-				elementButtons[i].setForeground(textWhite);
-			}
-		}
-		add(displayPanel, BorderLayout.CENTER);
+	public void actionPerformed(ActionEvent e) {
+		String arg = e.getActionCommand();
+		if (arg == "Exit")
+			System.exit(0);
 
+		if (arg == "About") {
+			JOptionPane.showMessageDialog(null,
+					"This is a free Periodic Table of the Elements.  Please ask before using my code." + "\n"
+							+ "Credits:" + "\n" + "~GitHub for hosting my repository." + "\n"
+							+ "~Merck KGaA for providing a comprehensive database of information in their iOS app EMD PTE"
+							+ "\n" + "~All of my CS professors at ONU for giving me the knowledge needed to code.");
+		}
 	}
 
 	public static void main(String[] args) {
