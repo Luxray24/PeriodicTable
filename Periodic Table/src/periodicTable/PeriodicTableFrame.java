@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -42,7 +41,6 @@ public class PeriodicTableFrame extends JFrame implements ActionListener {
 	private static final Color lanthanideBlue = new Color(0, 155, 155);
 	private static final Color actinideBlue = new Color(0, 55, 55);
 	private static final Color textWhite = new Color(255, 255, 255);
-	private static final Color backgroundBlack = new Color(0, 0, 0);
 	private JMenuBar mnuBar = new JMenuBar();
 	private JMenu file = new JMenu("File");
 	private JMenuItem fileExit = new JMenuItem("Exit");
