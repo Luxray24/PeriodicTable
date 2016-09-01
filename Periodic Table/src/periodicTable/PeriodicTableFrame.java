@@ -5,9 +5,14 @@ package periodicTable;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,6 +20,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -27,6 +33,8 @@ public class PeriodicTableFrame extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int genericInt = 0;
+	private int anotherGenericInt = 0;
 	private JButton[] elementButtons = new JButton[162];
 	private String[] elementButtonLabels = new String[162];
 	private JPanel displayPanel = new JPanel();
@@ -41,20 +49,33 @@ public class PeriodicTableFrame extends JFrame implements ActionListener {
 	private static final Color lanthanideBlue = new Color(0, 155, 155);
 	private static final Color actinideBlue = new Color(0, 55, 55);
 	private static final Color textWhite = new Color(255, 255, 255);
-	private JMenuBar mnuBar = new JMenuBar();
+	private static final Color backgroundBlack = new Color(0, 0, 0);
+	private NavBar mnuBar = new NavBar();
 	private JMenu file = new JMenu("File");
-	private JMenuItem fileExit = new JMenuItem("Exit");
+	private NavMenuItem fileExit = new NavMenuItem("Exit");
 	private JMenu options = new JMenu("Options");
 	private JMenu help = new JMenu("Help");
 	private JMenuItem helpAbout = new JMenuItem("About");
+	public int switchVal = 1;
 
 	PeriodicTableFrame() {
+		UIManager.put("MenuBar.background", backgroundBlack);
+		UIManager.put("MenuBar.foreground", textWhite);
+		UIManager.put("Menu.background", backgroundBlack);
+		UIManager.put("Menu.foreground", textWhite);
+		UIManager.put("MenuItem.background", backgroundBlack);
+		UIManager.put("MenuItem.foreground", textWhite);
 		setLabels();
 		setJMenuBar(mnuBar);
+		mnuBar.setColor(backgroundBlack);
+		mnuBar.setForeground(textWhite);
 		mnuBar.add(file);
+		file.setForeground(textWhite);
 		file.add(fileExit);
 		mnuBar.add(options);
+		options.setForeground(textWhite);
 		mnuBar.add(help);
+		help.setForeground(textWhite);
 		help.add(helpAbout);
 
 		fileExit.addActionListener(this);
@@ -66,6 +87,7 @@ public class PeriodicTableFrame extends JFrame implements ActionListener {
 		for (int i = 0; i < 162; i++) {
 			elementButtons[i] = new JButton(elementButtonLabels[i]);
 		}
+
 		this.setLayout(new BorderLayout());
 		displayPanel.setLayout(new GridLayout(9, 19, 5, 5));
 		for (int i = 0; i < 162; i++) {
@@ -121,6 +143,38 @@ public class PeriodicTableFrame extends JFrame implements ActionListener {
 		}
 		add(displayPanel, BorderLayout.CENTER);
 
+		for (int i = 0; i < 162; i++) {
+			anotherGenericInt = i;
+			if (i != 92 && i != 110) {
+				elementButtons[i].addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent ev) {
+						genericInt = anotherGenericInt;
+						if (genericInt == anotherGenericInt) {
+							setVisible(false);
+							Frame frame = new Frame();
+							JPanel panel = new JPanel();
+							JPanel panel2 = new JPanel();
+							JScrollPane scroll = new JScrollPane();
+							frame.setBounds(0, 0, 500, 500);
+							frame.setVisible(true);
+							panel.setLayout(new FlowLayout());
+							panel2.setLayout(new FlowLayout());
+							frame.add(panel, BorderLayout.CENTER);
+							panel.add(scroll);
+							frame.addWindowListener(new WindowAdapter() {
+								public void windowClosing(WindowEvent e) {
+									setVisible(true);
+									frame.dispose();
+								}
+							});
+						}
+					}
+				});
+			}
+			else{
+				elementButtons[i].setEnabled(false);
+			}
+		}
 	}
 
 	private void setLabels() {
@@ -420,6 +474,7 @@ public class PeriodicTableFrame extends JFrame implements ActionListener {
 							+ "~Merck KGaA for providing a comprehensive database of information in their iOS app EMD PTE"
 							+ "\n" + "~All of my CS professors at ONU for giving me the knowledge needed to code.");
 		}
+
 	}
 
 	public static void main(String[] args) {
